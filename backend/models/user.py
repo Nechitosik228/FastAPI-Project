@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, relationship
 Base = Config.BASE
 
 
-class User(PKMixin, Base, PUBMixin):
+class User(PKMixin, Base):
     __tablename__ = "users"
 
     name: Mapped[str]
