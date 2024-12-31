@@ -1,7 +1,7 @@
 from typing import List
 
 from .config import Config
-from .mixins import PUBMixin, PKMixin
+from .mixins import PKMixin
 
 from sqlalchemy.orm import Mapped, relationship
 
