@@ -1,5 +1,4 @@
-from . import (
-    comment,
-    post,
-    user
-)
+from fastapi import FastAPI
+
+app = FastAPI()
+
