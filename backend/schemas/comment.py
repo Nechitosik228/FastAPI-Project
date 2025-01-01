@@ -8,7 +8,7 @@ Session = Config.SESSION
 
 
 class CommentModel(BaseModel):
-    content: str = Field(..., max_length=20, description="Comment content")
+    content: str = Field(..., max_length=150, description="Comment content")
     post_id: int
     user_id: int
 
