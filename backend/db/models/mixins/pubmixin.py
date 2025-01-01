@@ -1,12 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Mapped
-
-from .. import Config
+from sqlalchemy.orm import Mapped, mapped_column
 
 
-Base = Config.BASE
 
-class PUBMixin(Base):
 
-    pub_date: Mapped[datetime]
+class PUBMixin:
+    pub_date: Mapped[datetime] = mapped_column(default=datetime.now)

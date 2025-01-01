@@ -1,21 +1,6 @@
-# from .models import (
-#     Config,
-#     User,
-#     Comment,
-#     Post
-# )
+from .db import migrate
+from .routes import app, post_router, user_router
 
 
-# def up():
-#     Config.BASE.metadata.create_all(Config.ENGINE)
-
-
-# def down():
-#     Config.BASE.metadata.drop_all(Config.ENGINE)
-
-
-# def migrate():
-#     down()
-#     up()
-
-
+app.include_router(post_router)
+app.include_router(user_router)

@@ -1,3 +1,5 @@
+from typing import List
+
 from .config import Config
 from .mixins import PUBMixin,PKMixin
 
@@ -17,4 +19,4 @@ class Post(PKMixin,Base,PUBMixin):
     user:Mapped["User"] = relationship(back_populates="posts")
     user_id:Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    comment:Mapped["Comment"] = relationship(back_populates="posts")
+    comments:Mapped[List["Comment"]] = relationship(back_populates="post")
