@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, HTTPException, Depends, status
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 
@@ -18,7 +18,21 @@ def create_post(data: PostModel, session: Annotated[Session, Depends(get_session
     return post
 
 
-@post_router.delete("/delete_post")
+@post_router.put("/update")
+def update_post(
+    data: PostModel, post_id: int, session: Annotated[Session, Depends(get_session)]
+):
+    post = session.scalar(select(Post).where(Post.id == post_id))
+    if not post:
+        raise HTTPException(status_code=404, detail=f"Post with id {post_id} not found")
+
+    post_update = update(Post).where(Post.id == post_id).values(**data.model_dump())
+    session.execute(post_update)
+    session.commit()
+    return {"detail": f"Post with id {post_id} updated successfully"}
+
+
+@post_router.delete("/delete_post/{post_id}")
 def delete_post(post_id: int, session: Annotated[Session, Depends(get_session)]):
     post = session.scalar(select(Post).where(Post.id == post_id))
     if not post:
