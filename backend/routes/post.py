@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import APIRouter, HTTPException, Depends, status
-from sqlalchemy import select, update
+from sqlalchemy import select, update, delete
 from sqlalchemy.orm import Session
 
 
-from ..db import Post, get_session
+from ..db import Post, User, get_session
 from ..schemas import PostModel
 
 
@@ -42,14 +42,16 @@ def delete_post(post_id: int, session: Annotated[Session, Depends(get_session)])
     return {"detail": f"Post with id {post_id} deleted successfully"}
 
 
-@post_router.delete("/delete_all_posts")
-def delete_all_posts(session: Annotated[Session, Depends(get_session)]):
-    posts = session.query(Post).all()
-    if not posts:
-        raise HTTPException(status_code=404, detail="No posts found to delete")
+@post_router.delete("/delete_all_posts/{user_id}")
+def delete_all_user_posts(
+    user_id: int, session: Annotated[Session, Depends(get_session)]
+):
+    user = session.scalar(select(User).where(User.id == user_id))
+    if not user:
+        raise HTTPException(status_code=404, detail=f"No user with id {user_id}")
 
-    for post in posts:
-        session.delete(post)
-
+    session.execute(delete(Post).where(Post.user_id == user_id))
     session.commit()
-    return {"detail": "All posts deleted successfully"}
+    return {
+        "detail": f"All posts by user with id {user_id} have been deleted successfully"
+    }
